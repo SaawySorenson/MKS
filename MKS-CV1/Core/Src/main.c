@@ -76,7 +76,7 @@ int main(void)
 
   /* USER CODE BEGIN Init */
   	 // uint8_t pole[32] = {1,0,1,0,1,0,0,1,1,1,0,1,1,1,0,1,1,1,0,0,1,0,1,0,1,0,0,0,0,0,0,0};
-  	  int delay = 200;
+  	  uint32_t delay = 200;
   	  uint32_t sos = 0b000000001010100111011101110010101;
   /* USER CODE END Init */
 
@@ -100,7 +100,7 @@ int main(void)
   {
 
     /* USER CODE END WHILE */
-	  for(int i = 0; i < 32; i++)
+	  for(unint32_t i = 0; i < 32; i++)
 	  {
 		  if(((sos >> i) & 1) == 1)
 		  {
@@ -109,7 +109,6 @@ int main(void)
 		  LL_mDelay(delay);
 		  LL_GPIO_ResetOutputPin(LD2_GPIO_Port, LD2_Pin);
 
-		  if(i == 31)  i = 0;
 
 	  }
     /* USER CODE BEGIN 3 */
