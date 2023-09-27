@@ -75,8 +75,9 @@ int main(void)
   LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_PWR);
 
   /* USER CODE BEGIN Init */
-  	  uint8_t pole[32] = {1,0,1,0,1,0,0,1,1,1,0,1,1,1,0,1,1,1,0,0,1,0,1,0,1,0,0,0,0,0,0,0};
+  	 // uint8_t pole[32] = {1,0,1,0,1,0,0,1,1,1,0,1,1,1,0,1,1,1,0,0,1,0,1,0,1,0,0,0,0,0,0,0};
   	  int delay = 200;
+  	  uint32_t sos = 0b000000001010100111011101110010101;
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -101,7 +102,7 @@ int main(void)
     /* USER CODE END WHILE */
 	  for(int i = 0; i < 32; i++)
 	  {
-		  if(pole[i] == 1)
+		  if(((sos >> i) & 1) == 1)
 		  {
 			  LL_GPIO_SetOutputPin(LD2_GPIO_Port, LD2_Pin);
 		  }
