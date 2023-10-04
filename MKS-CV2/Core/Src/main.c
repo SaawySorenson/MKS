@@ -32,6 +32,8 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #define LED_TIME_BLINK 300
+#define WAIT_TIME_LONG 40
+#define WAIT_TIME_SHORT 5
 #define LED_TIME_SHORT 100
 #define LED_TIME_LONG  1000
 
@@ -48,36 +50,59 @@ void blikac(void)
 
 void tlacitka (void)
 {
-	static uint32_t off_time;
+	static uint32_t delay;
+	static uint32_t delay2;
 
-	static uint32_t old_s2;
-	uint32_t new_s2 = LL_GPIO_IsInputPinSet(S2_GPIO_Port, S2_Pin);
-
-	if (old_s2 && !new_s2) // falling edge
+	if(Tick > delay + WAIT_TIME_LONG)
 	{
-		off_time = Tick + LED_TIME_SHORT;
-		LL_GPIO_SetOutputPin(LED2_GPIO_Port, LED2_Pin);
+		static uint32_t off_time;
+
+		//static uint16_t debounce = 0xFFFF;
+
+		static uint32_t old_s2;
+		uint32_t new_s2 = LL_GPIO_IsInputPinSet(S2_GPIO_Port, S2_Pin);
+
+		if (old_s2 && !new_s2) // falling edge
+		{
+			off_time = Tick + LED_TIME_SHORT;
+			LL_GPIO_SetOutputPin(LED2_GPIO_Port, LED2_Pin);
+			delay = Tick;
+		}
+
+		old_s2 = new_s2;
+
+
+		static uint32_t old_s1;
+		uint32_t new_s1 = LL_GPIO_IsInputPinSet(S1_GPIO_Port, S1_Pin);
+
+		if (old_s1 && !new_s1) // falling edge
+		{
+			off_time = Tick + LED_TIME_LONG;
+			LL_GPIO_SetOutputPin(LED2_GPIO_Port, LED2_Pin);
+			delay = Tick;
+		}
+
+		old_s1 = new_s1;
+
+/*
+	if(Tick > delay2 + WAIT_TIME_SHORT)
+	{
+		debounce <<= 1;
+		if(LL_GPIO_IsInputPinSet(S2_GPIO_Port, S2_Pin) & (1<<1))
+		{
+			debounce |= 0x0001;
+			delay2 = Tick;
+		}
 	}
-
-	old_s2 = new_s2;
-
-
-	static uint32_t old_s1;
-	uint32_t new_s1 = LL_GPIO_IsInputPinSet(S1_GPIO_Port, S1_Pin);
-
-	if (old_s1 && !new_s1) // falling edge
-	{
-		off_time = Tick + LED_TIME_LONG;
-		LL_GPIO_SetOutputPin(LED2_GPIO_Port, LED2_Pin);
-	}
-
-	old_s1 = new_s1;
+*/
 
 
+		if (Tick > off_time)
+		{
+			LL_GPIO_ResetOutputPin(LED2_GPIO_Port, LED2_Pin);
+		}
 
-	if (Tick > off_time)
-	{
-		LL_GPIO_ResetOutputPin(LED2_GPIO_Port, LED2_Pin);
+
 	}
 
 }
