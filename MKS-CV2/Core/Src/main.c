@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+	volatile uint32_t Tick;
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -31,6 +31,35 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define LED_TIME_BLINK 300
+
+void blikac(void)
+{
+	static uint32_t delay;
+
+	if (Tick > delay + LED_TIME_BLINK)
+	{
+		LL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
+	delay = Tick;
+	}
+}
+
+void blikatko (void)
+	{
+		static enum {LED_OFF, LED_ON} stav;
+		static uint32_t DelayCnt = 0;
+
+		if (stav == LED_ON)
+		{
+			if(Tick > (DelayCnt + 300))
+			{
+				GPIOD->BRR = (1<<0);
+				DelayCnt = Tick;
+				stav = LED_ON;
+			}
+		}
+	}
+
 
 /* USER CODE END PD */
 
@@ -89,7 +118,7 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  LL_SYSTICK_EnableIT();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -97,7 +126,8 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+	  blikatko();
+	  blikac();
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
