@@ -15,18 +15,16 @@ void sct_init()
 static void tick()
 {
 	HAL_GPIO_WritePin(SCT_CLK_GPIO_Port, SCT_CLK_Pin, 0);
-	HAL_Delay(5);
 	HAL_GPIO_WritePin(SCT_CLK_GPIO_Port, SCT_CLK_Pin, 1);
 }
 
 // value = 0b0001101010.... 32b
 void sct_led(uint32_t value)
 {
-	uint32_t pos = 0X00000001;
 
 	for(uint32_t i = 0; i < 32; i++)
 	{
-		if((value >> i) & (pos == 1))
+		if((value >> i) & 1)
 		{
 			HAL_GPIO_WritePin(SCT_SDI_GPIO_Port, SCT_SDI_Pin, 1);
 			tick();
