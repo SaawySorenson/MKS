@@ -67,7 +67,7 @@ static void MX_USART2_UART_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	uint32_t value = BYE;
+  //uint32_t value = BYE;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -99,7 +99,12 @@ int main(void)
   {
     /* USER CODE END WHILE */
 	  sct_init();
-	  sct_led(value);
+	  for(uint32_t i = 0; i < 10; i++)
+	  {
+		  sct_value(0 + (i * 111));
+		  HAL_Delay(300);
+	  }
+
 	  HAL_Delay(1000);
     /* USER CODE BEGIN 3 */
   }
