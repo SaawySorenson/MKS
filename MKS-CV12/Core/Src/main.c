@@ -23,7 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "lwip/apps/httpd.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -57,6 +57,8 @@ void StartDefaultTask(void const * argument);
 
 /* USER CODE BEGIN PFP */
 extern void tcpecho_init(void);
+extern void telnet_init(void);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -94,7 +96,6 @@ int main(void)
   MX_GPIO_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
-  tcpecho_init();
 
   /* USER CODE END 2 */
 
@@ -301,6 +302,9 @@ void StartDefaultTask(void const * argument)
   /* init code for LWIP */
   MX_LWIP_Init();
   /* USER CODE BEGIN 5 */
+  tcpecho_init();
+  telnet_init();
+  httpd_init();
   /* Infinite loop */
   for(;;)
   {
